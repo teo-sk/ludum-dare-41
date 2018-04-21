@@ -44,7 +44,7 @@ export default class Main extends Phaser.State {
     this.pipes.enableBody = true;
     this.pipes.createMultiple(30, Assets.Images.ImagesPipe.getName());
 
-    this.timer = this.game.time.events.loop(1500, this.addRowOfPipes, this);
+    this.timer = this.game.time.events.loop(3000, this.addRowOfPipes, this);
 
     this.score = 0;
     this.labelScore = this.game.add.text(20, 20, '0', {font: '30px Arial', fill: '#ffffff'});
@@ -68,7 +68,7 @@ export default class Main extends Phaser.State {
     if (this.bird.alive === false)
       return;
 
-    this.bird.body.velocity.y = -350;
+    this.bird.body.velocity.y = -300;
 
     this.game.add.tween(this.bird).to({angle: -20}, 100).start();
 
@@ -85,7 +85,7 @@ export default class Main extends Phaser.State {
 
     pipe.reset(x, y);
 
-    pipe.body.velocity.x = -200;
+    pipe.body.velocity.x = -120;
 
     pipe.checkWorldBounds = true;
     pipe.outOfBoundsKill = true;
