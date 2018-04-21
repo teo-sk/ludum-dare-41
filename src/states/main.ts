@@ -200,7 +200,7 @@ export default class Main extends Phaser.State {
   }
 
   private breakBreakable(ball: Phaser.Sprite, wall: Phaser.Sprite): void {
-    this.game.add.tween(wall).to({angle: -1080}, 2000).start();
+    this.game.add.tween(wall).to({angle: -1080}, 1500).start();
     wall.body.gravity.y = 500;
   }
 }
