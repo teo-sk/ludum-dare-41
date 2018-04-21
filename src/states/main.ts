@@ -51,6 +51,7 @@ export default class Main extends Phaser.State {
     // Add some gravity to the ball as well
     this.game.physics.arcade.enable(this.ball);
     this.ball.body.gravity.y = 300;
+    this.ball.body.bounce.setTo(1, 1);
 
     // Call the 'jump' function when the spacekey is hit
     let spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -79,6 +80,8 @@ export default class Main extends Phaser.State {
 
     this.game.physics.arcade.overlap(this.bird, this.pipes, this.hitPipe, null, this);
     this.game.physics.arcade.overlap(this.bird, this.ball, this.catchBall, null, this);
+
+    this.game.physics.arcade.collide(this.pipes, this.ball, () => console.log('dud'));
 
     if (this.bird.angle < 20) {
       this.bird.angle += 1;
@@ -120,11 +123,12 @@ export default class Main extends Phaser.State {
   }
 
   private addOnePipe(x, y): void {
-    let pipe = this.pipes.getFirstDead();
+    let pipe: Phaser.Sprite = this.pipes.getFirstDead();
 
     pipe.reset(x, y);
 
     pipe.body.velocity.x = -120;
+    pipe.body.immovable = true;
 
     pipe.checkWorldBounds = true;
     pipe.outOfBoundsKill = true;
