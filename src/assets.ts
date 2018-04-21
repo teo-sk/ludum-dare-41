@@ -16,6 +16,11 @@ export namespace Images {
 
         static getPNG(): string { return require('assets/images/bird.png'); }
     }
+    export class ImagesBreakable {
+        static getName(): string { return 'breakable'; }
+
+        static getPNG(): string { return require('assets/images/breakable.png'); }
+    }
     export class ImagesPipe {
         static getName(): string { return 'pipe'; }
 

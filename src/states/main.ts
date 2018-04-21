@@ -9,6 +9,8 @@ export default class Main extends Phaser.State {
 
   private pipes: Phaser.Group;
 
+  private breakables: Phaser.Group;
+
   private timer: Phaser.TimerEvent;
 
   private score: number;
@@ -64,6 +66,10 @@ export default class Main extends Phaser.State {
     this.pipes.enableBody = true;
     this.pipes.createMultiple(30, Assets.Images.ImagesPipe.getName());
 
+    this.breakables = this.game.add.group();
+    this.breakables.enableBody = true;
+    this.breakables.createMultiple(3, Assets.Images.ImagesBreakable.getName());
+
     this.timer = this.game.time.events.loop(3000, this.addRowOfPipes, this);
 
     this.score = 0;
@@ -75,13 +81,16 @@ export default class Main extends Phaser.State {
 
   public update(): void {
     // If the bird is out of the world (too high or too low), call the 'restartGame' function
-    if (this.bird.inWorld === false)
+    if (this.bird.inWorld === false) {
       this.restartGame();
+    }
 
     this.game.physics.arcade.overlap(this.bird, this.pipes, this.hitPipe, null, this);
+    this.game.physics.arcade.overlap(this.bird, this.breakables, this.hitPipe, null, this);
     this.game.physics.arcade.overlap(this.bird, this.ball, this.catchBall, null, this);
 
-    this.game.physics.arcade.collide(this.pipes, this.ball, () => console.log('dud'));
+    this.game.physics.arcade.collide(this.pipes, this.ball);
+    this.game.physics.arcade.collide(this.breakables, this.ball, this.breakBreakable, null, this);
 
     if (this.bird.angle < 20) {
       this.bird.angle += 1;
@@ -134,15 +143,34 @@ export default class Main extends Phaser.State {
     pipe.outOfBoundsKill = true;
   }
 
+  private addOneBreakable(x, y): void {
+    let breakable: Phaser.Sprite = this.breakables.getFirstDead();
+
+    breakable.reset(x, y);
+    breakable.anchor.setTo(0.5, 0.5);
+    breakable.body.gravity.y = 0;
+    breakable.rotation = 0;
+    breakable.body.velocity.x = -120;
+    breakable.body.mass = 4;
+
+    breakable.checkWorldBounds = true;
+    breakable.outOfBoundsKill = true;
+  }
+
   private addRowOfPipes(): void {
     let hole = Math.floor(Math.random() * 5) + 1;
 
-    for (let i = 0; i < 10; i++)
+    for (let i = 0; i < 10; i++) {
       if (i !== hole && i !== hole + 1) {
         this.addOnePipe(800, i * 60 + 10);
       }
-      this.score += 1;
-      this.labelScore.text = this.score.toString();
+      if (i === hole) {
+        this.addOneBreakable(825, i * 60 + 65);
+      }
+    }
+
+    this.score += 1;
+    this.labelScore.text = this.score.toString();
   }
 
   private hitPipe(): void {
@@ -157,6 +185,10 @@ export default class Main extends Phaser.State {
       p.body.velocity.x = 0;
     }, this);
 
+    this.breakables.forEachAlive((b) => {
+      b.body.velocity.x = 0;
+    }, this);
+
     this.hitSound.play();
   }
 
@@ -165,5 +197,10 @@ export default class Main extends Phaser.State {
       return;
     }
     this.hasBall = true;
+  }
+
+  private breakBreakable(ball: Phaser.Sprite, wall: Phaser.Sprite): void {
+    this.game.add.tween(wall).to({angle: -1080}, 2000).start();
+    wall.body.gravity.y = 500;
   }
 }
