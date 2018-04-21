@@ -85,7 +85,7 @@ export default class Main extends Phaser.State {
     }
 
     if (this.hasBall) {
-      let speed = (Math.abs(this.bird.body.velocity.y) < 100) ? 30 : 200
+      let speed = (Math.abs(this.bird.body.velocity.y) < 100) ? 30 : 200;
       this.game.physics.arcade.moveToObject(this.ball, this.bird, speed);
     }
   }
@@ -160,7 +160,6 @@ export default class Main extends Phaser.State {
     if (this.hasBall || this.justShot) {
       return;
     }
-    //this.ball.body.gravity.y = 0;
     this.hasBall = true;
   }
 }
