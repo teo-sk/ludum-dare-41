@@ -5,11 +5,17 @@ export default class Main extends Phaser.State {
 
   private bird: Phaser.Sprite;
 
+  private ball: Phaser.Sprite;
+
   private pipes: Phaser.Group;
 
   private timer: Phaser.TimerEvent;
 
   private score: number;
+
+  private hasBall: boolean;
+
+  private justShot: boolean;
 
   private labelScore: Phaser.Text;
 
@@ -25,7 +31,10 @@ export default class Main extends Phaser.State {
   }
 
   public create(): void {
-  // Set the physics system
+    this.hasBall = false;
+    this.justShot = false;
+
+    // Set the physics system
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
     // Display the bird on the screen
@@ -36,9 +45,19 @@ export default class Main extends Phaser.State {
     this.bird.body.gravity.y = 1000;
     this.bird.anchor.setTo(-0.2, 0.5);
 
+    // Display the ball
+    this.ball = this.game.add.sprite(150, 300, Assets.Images.ImagesBall.getName());
+
+    // Add some gravity to the ball as well
+    this.game.physics.arcade.enable(this.ball);
+    this.ball.body.gravity.y = 300;
+
     // Call the 'jump' function when the spacekey is hit
     let spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(this.jump, this);
+
+    let enterKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+    enterKey.onDown.add(this.shoot, this);
 
     this.pipes = this.game.add.group();
     this.pipes.enableBody = true;
@@ -59,20 +78,40 @@ export default class Main extends Phaser.State {
       this.restartGame();
 
     this.game.physics.arcade.overlap(this.bird, this.pipes, this.hitPipe, null, this);
+    this.game.physics.arcade.overlap(this.bird, this.ball, this.catchBall, null, this);
 
-    if (this.bird.angle < 20)
+    if (this.bird.angle < 20) {
       this.bird.angle += 1;
+    }
+
+    if (this.hasBall) {
+      let speed = (Math.abs(this.bird.body.velocity.y) < 100) ? 30 : 200
+      this.game.physics.arcade.moveToObject(this.ball, this.bird, speed);
+    }
   }
 
   private jump(): void {
-    if (this.bird.alive === false)
+    if (this.bird.alive === false) {
       return;
+    }
 
     this.bird.body.velocity.y = -300;
 
     this.game.add.tween(this.bird).to({angle: -20}, 100).start();
 
     this.jumpSound.play();
+  }
+
+  private shoot(): void {
+    if (!this.hasBall) {
+      return;
+    }
+
+    this.hasBall = false;
+    this.justShot = true;
+    this.game.time.events.add(500, () => this.justShot = false);
+    this.ball.body.velocity.y = -250;
+    this.ball.body.velocity.x = 500;
   }
 
   private restartGame(): void {
@@ -95,15 +134,17 @@ export default class Main extends Phaser.State {
     let hole = Math.floor(Math.random() * 5) + 1;
 
     for (let i = 0; i < 10; i++)
-      if (i !== hole && i !== hole + 1)
+      if (i !== hole && i !== hole + 1) {
         this.addOnePipe(800, i * 60 + 10);
-        this.score += 1;
-        this.labelScore.text = this.score.toString();
+      }
+      this.score += 1;
+      this.labelScore.text = this.score.toString();
   }
 
   private hitPipe(): void {
-    if (this.bird.alive === false)
+    if (this.bird.alive === false) {
       return;
+    }
 
     this.bird.alive = false;
     this.game.time.events.remove(this.timer);
@@ -113,5 +154,13 @@ export default class Main extends Phaser.State {
     }, this);
 
     this.hitSound.play();
+  }
+
+  private catchBall(): void {
+    if (this.hasBall || this.justShot) {
+      return;
+    }
+    //this.ball.body.gravity.y = 0;
+    this.hasBall = true;
   }
 }
