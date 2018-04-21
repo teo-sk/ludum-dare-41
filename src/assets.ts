@@ -6,6 +6,16 @@ export namespace Images {
 
         static getPNG(): string { return require('assets/images/background_template.png'); }
     }
+    export class ImagesBird {
+        static getName(): string { return 'bird'; }
+
+        static getPNG(): string { return require('assets/images/bird.png'); }
+    }
+    export class ImagesPipe {
+        static getName(): string { return 'pipe'; }
+
+        static getPNG(): string { return require('assets/images/pipe.png'); }
+    }
 }
 
 export namespace Spritesheets {
@@ -64,6 +74,16 @@ export namespace Atlases {
 }
 
 export namespace Audio {
+    export class AudioHit {
+        static getName(): string { return 'hit'; }
+
+        static getWAV(): string { return require('assets/audio/hit.wav'); }
+    }
+    export class AudioJump {
+        static getName(): string { return 'jump'; }
+
+        static getWAV(): string { return require('assets/audio/jump.wav'); }
+    }
     export class AudioMusic {
         static getName(): string { return 'music'; }
 
