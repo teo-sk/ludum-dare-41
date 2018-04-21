@@ -3,28 +3,28 @@ import * as Assets from '../assets';
 
 export default class Main extends Phaser.State {
 
-  bird: Phaser.Sprite;
+  private bird: Phaser.Sprite;
 
-  pipes: Phaser.Group;
+  private pipes: Phaser.Group;
 
-  timer: Phaser.TimerEvent;
+  private timer: Phaser.TimerEvent;
 
-  score: number;
+  private score: number;
 
-  labelScore: Phaser.Text;
+  private labelScore: Phaser.Text;
 
-  jumpSound: Phaser.Sound;
+  private jumpSound: Phaser.Sound;
 
-  hitSound: Phaser.Sound;
+  private hitSound: Phaser.Sound;
 
-  preload() {
+  public preload(): void {
 
     // Change the background color of the game
     this.game.stage.backgroundColor = '#71c5cf';
 
   }
 
-  create() {
+  public create(): void {
   // Set the physics system
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -53,7 +53,7 @@ export default class Main extends Phaser.State {
     this.hitSound = this.game.add.audio(Assets.Audio.AudioHit.getName());
   }
 
-  update() {
+  public update(): void {
     // If the bird is out of the world (too high or too low), call the 'restartGame' function
     if (this.bird.inWorld === false)
       this.restartGame();
@@ -64,7 +64,7 @@ export default class Main extends Phaser.State {
       this.bird.angle += 1;
   }
 
-  jump() {
+  private jump(): void {
     if (this.bird.alive === false)
       return;
 
@@ -75,12 +75,12 @@ export default class Main extends Phaser.State {
     this.jumpSound.play();
   }
 
-  restartGame() {
+  private restartGame(): void {
     // Start the 'main' state, which restarts the game
     this.game.state.start('main');
   }
 
-  addOnePipe(x, y) {
+  private addOnePipe(x, y): void {
     let pipe = this.pipes.getFirstDead();
 
     pipe.reset(x, y);
@@ -91,7 +91,7 @@ export default class Main extends Phaser.State {
     pipe.outOfBoundsKill = true;
   }
 
-  addRowOfPipes() {
+  private addRowOfPipes(): void {
     let hole = Math.floor(Math.random() * 5) + 1;
 
     for (let i = 0; i < 10; i++)
@@ -101,7 +101,7 @@ export default class Main extends Phaser.State {
         this.labelScore.text = this.score.toString();
   }
 
-  hitPipe() {
+  private hitPipe(): void {
     if (this.bird.alive === false)
       return;
 
