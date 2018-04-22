@@ -184,7 +184,9 @@ export default class Main extends Phaser.State {
 
     this.game.add.tween(this.bird).to({angle: -20}, 100).start();
 
-    Phaser.ArrayUtils.getRandomItem(this.jumpSounds).play();
+    if (this.hasBall) {
+      Phaser.ArrayUtils.getRandomItem(this.jumpSounds).play();
+    }
   }
 
   private shoot(): void {
