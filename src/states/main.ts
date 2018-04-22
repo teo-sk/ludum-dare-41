@@ -2,6 +2,7 @@ import * as Assets from '../assets';
 
 
 export default class Main extends Phaser.State {
+  private background: Phaser.TileSprite;
 
   private bird: Phaser.Sprite;
 
@@ -36,6 +37,8 @@ export default class Main extends Phaser.State {
     this.hasBall = false;
     this.justShot = false;
 
+    this.background = this.game.add.tileSprite(0, 0, 800, 600, Assets.Images.ImagesGrass.getName());
+
     // Set the physics system
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -48,7 +51,7 @@ export default class Main extends Phaser.State {
     this.bird.anchor.setTo(-0.2, 0.5);
 
     // Display the ball
-    this.ball = this.game.add.sprite(150, 300, Assets.Images.ImagesBall.getName());
+    this.ball = this.game.add.sprite(130, 300, Assets.Images.ImagesBall.getName());
 
     // Add some gravity to the ball as well
     this.game.physics.arcade.enable(this.ball);
@@ -85,6 +88,10 @@ export default class Main extends Phaser.State {
       this.restartGame();
     }
 
+    if (this.bird.alive) {
+      this.background.tilePosition.x -= 2;
+    }
+
     this.game.physics.arcade.overlap(this.bird, this.pipes, this.hitPipe, null, this);
     this.game.physics.arcade.overlap(this.bird, this.breakables, this.hitPipe, null, this);
     this.game.physics.arcade.overlap(this.bird, this.ball, this.catchBall, null, this);
@@ -98,7 +105,8 @@ export default class Main extends Phaser.State {
 
     if (this.hasBall) {
       let speed = (Math.abs(this.bird.body.velocity.y) < 100) ? 30 : 200;
-      this.game.physics.arcade.moveToObject(this.ball, this.bird, speed);
+      this.game.physics.arcade.moveToXY(this.ball, this.bird.position.x + 35, this.bird.position.y, speed);
+      //this.game.physics.arcade.moveToObject(this.ball, this.bird, speed);
     }
   }
 
@@ -118,10 +126,15 @@ export default class Main extends Phaser.State {
     if (!this.hasBall) {
       return;
     }
-
+    this.bird.loadTexture(Assets.Images.ImagesBirdShoot.getName())
     this.hasBall = false;
     this.justShot = true;
-    this.game.time.events.add(500, () => this.justShot = false);
+    this.game.time.events.add(500, () => {
+      this.justShot = false;
+      if (this.bird.key === Assets.Images.ImagesBirdShoot.getName()) {
+        this.bird.loadTexture(Assets.Images.ImagesBird.getName());
+      }
+    });
     this.ball.body.velocity.y = -250;
     this.ball.body.velocity.x = 500;
   }
@@ -179,6 +192,7 @@ export default class Main extends Phaser.State {
     }
 
     this.bird.alive = false;
+    this.bird.loadTexture(Assets.Images.ImagesBirdDead.getName());
     this.game.time.events.remove(this.timer);
 
     this.pipes.forEachAlive((p) => {
@@ -200,7 +214,13 @@ export default class Main extends Phaser.State {
   }
 
   private breakBreakable(ball: Phaser.Sprite, wall: Phaser.Sprite): void {
-    this.game.add.tween(wall).to({angle: -1080}, 1500).start();
-    wall.body.gravity.y = 500;
+    this.bird.loadTexture(Assets.Images.ImagesBirdGoal.getName());
+    this.game.time.events.add(500, () => {
+      if (this.bird.key === Assets.Images.ImagesBirdGoal.getName()) {
+        this.bird.loadTexture(Assets.Images.ImagesBird.getName());
+      }
+    });
+    this.game.add.tween(wall).to({angle: -1080}, 1000).start();
+    wall.body.gravity.y = 1500;
   }
 }

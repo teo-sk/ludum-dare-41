@@ -11,6 +11,21 @@ export namespace Images {
 
         static getPNG(): string { return require('assets/images/ball.png'); }
     }
+    export class ImagesBirdDead {
+        static getName(): string { return 'bird_dead'; }
+
+        static getPNG(): string { return require('assets/images/bird_dead.png'); }
+    }
+    export class ImagesBirdGoal {
+        static getName(): string { return 'bird_goal'; }
+
+        static getPNG(): string { return require('assets/images/bird_goal.png'); }
+    }
+    export class ImagesBirdShoot {
+        static getName(): string { return 'bird_shoot'; }
+
+        static getPNG(): string { return require('assets/images/bird_shoot.png'); }
+    }
     export class ImagesBird {
         static getName(): string { return 'bird'; }
 
@@ -20,6 +35,11 @@ export namespace Images {
         static getName(): string { return 'breakable'; }
 
         static getPNG(): string { return require('assets/images/breakable.png'); }
+    }
+    export class ImagesGrass {
+        static getName(): string { return 'grass'; }
+
+        static getJPG(): string { return require('assets/images/grass.jpg'); }
     }
     export class ImagesPipe {
         static getName(): string { return 'pipe'; }
