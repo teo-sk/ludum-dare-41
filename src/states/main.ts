@@ -24,6 +24,8 @@ export default class Main extends Phaser.State {
 
   private labelScore: Phaser.Text;
 
+  private emitter: Phaser.Particles.Arcade.Emitter;
+
   private jumpSound: Phaser.Sound;
 
   private jumpSounds: Phaser.Sound[];
@@ -58,6 +60,15 @@ export default class Main extends Phaser.State {
 
     // Set the physics system
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    this.emitter = this.game.add.emitter(100, 245, 400);
+    this.emitter.makeParticles(Assets.Images.ImagesGrassParticle.getName());
+    this.emitter.gravity.y = 200;
+    this.emitter.gravity.x = -400;
+    this.emitter.setAlpha(1, 0, 3000);
+    this.emitter.setScale(0.8, 0, 0.8, 0, 3000);
+
+    this.emitter.start(false, 3000, 20);
 
     // Display the bird on the screen
     this.bird = this.game.add.sprite(100, 245, Assets.Images.ImagesBird.getName());
@@ -151,6 +162,9 @@ export default class Main extends Phaser.State {
       let speed = (Math.abs(this.bird.body.velocity.y) < 100) ? 30 : 200;
       this.game.physics.arcade.moveToXY(this.ball, this.bird.position.x + 35, this.bird.position.y, speed);
     }
+
+    this.emitter.emitX = this.bird.position.x + 35;
+    this.emitter.emitY = this.bird.position.y + 10;
   }
 
   private jump(): void {
@@ -187,6 +201,7 @@ export default class Main extends Phaser.State {
     // Start the 'main' state, which restarts the game
     this.music.stop();
     this.game.state.start('main');
+    this.emitter.on = true;
   }
 
   private addOnePipe(x, y): void {
@@ -250,6 +265,8 @@ export default class Main extends Phaser.State {
 
     this.hitSound.play();
     Phaser.ArrayUtils.getRandomItem(this.deathSounds).play();
+
+    this.emitter.on = false;
   }
 
   private catchBall(): void {

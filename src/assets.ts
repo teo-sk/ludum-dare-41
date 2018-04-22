@@ -36,6 +36,11 @@ export namespace Images {
 
         static getPNG(): string { return require('assets/images/breakable.png'); }
     }
+    export class ImagesGrassParticle {
+        static getName(): string { return 'grass_particle'; }
+
+        static getPNG(): string { return require('assets/images/grass_particle.png'); }
+    }
     export class ImagesGrass {
         static getName(): string { return 'grass'; }
 
