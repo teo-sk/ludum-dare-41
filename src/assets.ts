@@ -104,6 +104,61 @@ export namespace Atlases {
 }
 
 export namespace Audio {
+    export class AudioBounce1 {
+        static getName(): string { return 'bounce1'; }
+
+        static getWAV(): string { return require('assets/audio/bounce1.wav'); }
+    }
+    export class AudioBounce2 {
+        static getName(): string { return 'bounce2'; }
+
+        static getWAV(): string { return require('assets/audio/bounce2.wav'); }
+    }
+    export class AudioBounce3 {
+        static getName(): string { return 'bounce3'; }
+
+        static getWAV(): string { return require('assets/audio/bounce3.wav'); }
+    }
+    export class AudioCheer {
+        static getName(): string { return 'cheer'; }
+
+        static getWAV(): string { return require('assets/audio/cheer.wav'); }
+    }
+    export class AudioDeath1 {
+        static getName(): string { return 'death1'; }
+
+        static getWAV(): string { return require('assets/audio/death1.wav'); }
+    }
+    export class AudioDeath2 {
+        static getName(): string { return 'death2'; }
+
+        static getWAV(): string { return require('assets/audio/death2.wav'); }
+    }
+    export class AudioDeath3 {
+        static getName(): string { return 'death3'; }
+
+        static getWAV(): string { return require('assets/audio/death3.wav'); }
+    }
+    export class AudioDeath4 {
+        static getName(): string { return 'death4'; }
+
+        static getWAV(): string { return require('assets/audio/death4.wav'); }
+    }
+    export class AudioGoal1 {
+        static getName(): string { return 'goal1'; }
+
+        static getWAV(): string { return require('assets/audio/goal1.wav'); }
+    }
+    export class AudioGoal2 {
+        static getName(): string { return 'goal2'; }
+
+        static getWAV(): string { return require('assets/audio/goal2.wav'); }
+    }
+    export class AudioGoal3 {
+        static getName(): string { return 'goal3'; }
+
+        static getWAV(): string { return require('assets/audio/goal3.wav'); }
+    }
     export class AudioHit {
         static getName(): string { return 'hit'; }
 
@@ -114,6 +169,31 @@ export namespace Audio {
 
         static getWAV(): string { return require('assets/audio/jump.wav'); }
     }
+    export class AudioJump1 {
+        static getName(): string { return 'jump1'; }
+
+        static getWAV(): string { return require('assets/audio/jump1.wav'); }
+    }
+    export class AudioJump2 {
+        static getName(): string { return 'jump2'; }
+
+        static getWAV(): string { return require('assets/audio/jump2.wav'); }
+    }
+    export class AudioJump3 {
+        static getName(): string { return 'jump3'; }
+
+        static getWAV(): string { return require('assets/audio/jump3.wav'); }
+    }
+    export class AudioJump4 {
+        static getName(): string { return 'jump4'; }
+
+        static getWAV(): string { return require('assets/audio/jump4.wav'); }
+    }
+    export class AudioKick {
+        static getName(): string { return 'kick'; }
+
+        static getWAV(): string { return require('assets/audio/kick.wav'); }
+    }
     export class AudioMusic {
         static getName(): string { return 'music'; }
 
@@ -121,6 +201,11 @@ export namespace Audio {
         static getM4A(): string { return require('assets/audio/music.m4a'); }
         static getMP3(): string { return require('assets/audio/music.mp3'); }
         static getOGG(): string { return require('assets/audio/music.ogg'); }
+    }
+    export class AudioWhistle {
+        static getName(): string { return 'whistle'; }
+
+        static getWAV(): string { return require('assets/audio/whistle.wav'); }
     }
 }
 

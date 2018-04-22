@@ -20,11 +20,27 @@ export default class Main extends Phaser.State {
 
   private justShot: boolean;
 
+  private justBounced: boolean;
+
   private labelScore: Phaser.Text;
 
   private jumpSound: Phaser.Sound;
 
+  private jumpSounds: Phaser.Sound[];
+
+  private deathSounds: Phaser.Sound[];
+
+  private goalSounds: Phaser.Sound[];
+
+  private bounceSounds: Phaser.Sound[];
+
+  private kickSound: Phaser.Sound;
+  
   private hitSound: Phaser.Sound;
+
+  private cheerSound: Phaser.Sound;
+
+  private music: Phaser.Sound;
 
   public preload(): void {
 
@@ -36,6 +52,7 @@ export default class Main extends Phaser.State {
   public create(): void {
     this.hasBall = false;
     this.justShot = false;
+    this.justBounced = false;
 
     this.background = this.game.add.tileSprite(0, 0, 800, 600, Assets.Images.ImagesGrass.getName());
 
@@ -79,7 +96,34 @@ export default class Main extends Phaser.State {
     this.labelScore = this.game.add.text(20, 20, '0', {font: '30px Arial', fill: '#ffffff'});
 
     this.jumpSound = this.game.add.audio(Assets.Audio.AudioJump.getName());
-    this.hitSound = this.game.add.audio(Assets.Audio.AudioHit.getName());
+    this.hitSound = this.game.add.audio(Assets.Audio.AudioWhistle.getName());
+    this.kickSound = this.game.add.audio(Assets.Audio.AudioKick.getName());
+    this.cheerSound = this.game.add.audio(Assets.Audio.AudioCheer.getName());
+    this.jumpSounds = [
+      this.game.add.audio(Assets.Audio.AudioJump1.getName()),
+      this.game.add.audio(Assets.Audio.AudioJump2.getName()),
+      this.game.add.audio(Assets.Audio.AudioJump3.getName()),
+      this.game.add.audio(Assets.Audio.AudioJump4.getName()),
+    ];
+    this.deathSounds = [
+      this.game.add.audio(Assets.Audio.AudioDeath1.getName()),
+      this.game.add.audio(Assets.Audio.AudioDeath2.getName()),
+      this.game.add.audio(Assets.Audio.AudioDeath3.getName()),
+      this.game.add.audio(Assets.Audio.AudioDeath4.getName()),
+    ];
+    this.goalSounds = [
+      this.game.add.audio(Assets.Audio.AudioGoal1.getName()),
+      this.game.add.audio(Assets.Audio.AudioGoal2.getName()),
+      this.game.add.audio(Assets.Audio.AudioGoal3.getName()),
+    ];
+    this.bounceSounds = [
+      this.game.add.audio(Assets.Audio.AudioBounce1.getName()),
+      this.game.add.audio(Assets.Audio.AudioBounce2.getName()),
+      this.game.add.audio(Assets.Audio.AudioBounce3.getName()),
+    ];
+
+    this.music = this.game.add.audio(Assets.Audio.AudioMusic.getName());
+    this.music.play(null, null, 0.2, true);
   }
 
   public update(): void {
@@ -96,7 +140,7 @@ export default class Main extends Phaser.State {
     this.game.physics.arcade.overlap(this.bird, this.breakables, this.hitPipe, null, this);
     this.game.physics.arcade.overlap(this.bird, this.ball, this.catchBall, null, this);
 
-    this.game.physics.arcade.collide(this.pipes, this.ball);
+    this.game.physics.arcade.collide(this.pipes, this.ball, this.bounceBall, null, this);
     this.game.physics.arcade.collide(this.breakables, this.ball, this.breakBreakable, null, this);
 
     if (this.bird.angle < 20) {
@@ -106,7 +150,6 @@ export default class Main extends Phaser.State {
     if (this.hasBall) {
       let speed = (Math.abs(this.bird.body.velocity.y) < 100) ? 30 : 200;
       this.game.physics.arcade.moveToXY(this.ball, this.bird.position.x + 35, this.bird.position.y, speed);
-      //this.game.physics.arcade.moveToObject(this.ball, this.bird, speed);
     }
   }
 
@@ -118,15 +161,15 @@ export default class Main extends Phaser.State {
     this.bird.body.velocity.y = -300;
 
     this.game.add.tween(this.bird).to({angle: -20}, 100).start();
-
-    this.jumpSound.play();
+    
+    Phaser.ArrayUtils.getRandomItem(this.jumpSounds).play();
   }
 
   private shoot(): void {
     if (!this.hasBall) {
       return;
     }
-    this.bird.loadTexture(Assets.Images.ImagesBirdShoot.getName())
+    this.bird.loadTexture(Assets.Images.ImagesBirdShoot.getName());
     this.hasBall = false;
     this.justShot = true;
     this.game.time.events.add(500, () => {
@@ -137,10 +180,12 @@ export default class Main extends Phaser.State {
     });
     this.ball.body.velocity.y = -250;
     this.ball.body.velocity.x = 500;
+    this.kickSound.play();
   }
 
   private restartGame(): void {
     // Start the 'main' state, which restarts the game
+    this.music.stop();
     this.game.state.start('main');
   }
 
@@ -204,6 +249,7 @@ export default class Main extends Phaser.State {
     }, this);
 
     this.hitSound.play();
+    Phaser.ArrayUtils.getRandomItem(this.deathSounds).play();
   }
 
   private catchBall(): void {
@@ -222,5 +268,16 @@ export default class Main extends Phaser.State {
     });
     this.game.add.tween(wall).to({angle: -1080}, 1000).start();
     wall.body.gravity.y = 1500;
+    Phaser.ArrayUtils.getRandomItem(this.goalSounds).play();
+    this.cheerSound.play(null, null, 0.2);
+  }
+
+  private bounceBall(): void {
+    if (this.justBounced) {
+      return;
+    }
+    Phaser.ArrayUtils.getRandomItem(this.bounceSounds).play();
+    this.justBounced = true;
+    this.game.time.events.add(500, () => this.justBounced = false);
   }
 }

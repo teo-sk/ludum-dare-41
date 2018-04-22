@@ -12,3 +12,5 @@ Character code:
 eyJTb2NrcyI6IjIiLCJTaG9lcyI6IjQiLCJQYW50cyI6IjgiLCJUb3AiOiI2IiwiRXllYnJvd3MiOiIxIiwiRXllcyI6IjEiLCJNb3V0aCI6IjIxIiwiSGFpclRvcCI6IjUiLCJza2luVG9uZSI6ImY4Y2NhZSIsImhhaXJUb25lIjoiZWNkZDM3IiwiaGFpclRvbmUyIjoiMzMzMzMzIn0=
 ```
 
+Crowd sound basic by FNC Effects - https://www.youtube.com/channel/UC9e-w6Yi2CvrLc4AJ9KaFzw
+Crowd sound goal cheer by Stephan Schutze - http://soundbible.com/1724-Large-Stadium.html
