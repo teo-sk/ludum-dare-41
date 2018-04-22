@@ -39,7 +39,7 @@ export default class Main extends Phaser.State {
   private bounceSounds: Phaser.Sound[];
 
   private kickSound: Phaser.Sound;
-  
+
   private hitSound: Phaser.Sound;
 
   private cheerSound: Phaser.Sound;
@@ -183,7 +183,7 @@ export default class Main extends Phaser.State {
     this.bird.body.velocity.y = -300;
 
     this.game.add.tween(this.bird).to({angle: -20}, 100).start();
-    
+
     Phaser.ArrayUtils.getRandomItem(this.jumpSounds).play();
   }
 

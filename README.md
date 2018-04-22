@@ -1,5 +1,15 @@
 # Teo's entry to Ludum Dare 41
 
+Ludum Dare 41 Theme was **"Combine 2 Incompatible Genres"**
+
+## FLAPPY SOCCER
+
+Combining the challenge of the Flappy genre, and the joy of scoring goals in soccer, Flappy Soccer offers quite big difficulty and fun experience. You need to score a goal to be able to pass through the gap, and of course catch the ball again, because you're gonna need it for the next gap!
+
+Play here: http://ldjam.toffgames.com/41/
+
+![screen](screen_2.jpg)
+
 Language: TypeScript  
 Framework: Phaser
 
