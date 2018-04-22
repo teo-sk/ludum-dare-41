@@ -46,6 +46,16 @@ export namespace Images {
 
         static getJPG(): string { return require('assets/images/grass.jpg'); }
     }
+    export class ImagesHeader {
+        static getName(): string { return 'header'; }
+
+        static getPNG(): string { return require('assets/images/header.png'); }
+    }
+    export class ImagesIntro {
+        static getName(): string { return 'intro'; }
+
+        static getPNG(): string { return require('assets/images/intro.png'); }
+    }
     export class ImagesPipe {
         static getName(): string { return 'pipe'; }
 

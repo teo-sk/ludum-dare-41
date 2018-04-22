@@ -8,6 +8,8 @@ export default class Main extends Phaser.State {
 
   private ball: Phaser.Sprite;
 
+  private intro: Phaser.Sprite;
+
   private pipes: Phaser.Group;
 
   private breakables: Phaser.Group;
@@ -85,6 +87,12 @@ export default class Main extends Phaser.State {
     this.game.physics.arcade.enable(this.ball);
     this.ball.body.gravity.y = 300;
     this.ball.body.bounce.setTo(1, 1);
+
+    this.intro = this.game.add.sprite(this.game.world.centerX - 350, 150, Assets.Images.ImagesIntro.getName());
+    this.game.time.events.add(2000, () => {
+      this.game.add.tween(this.intro).to({y: 0}, 1500, Phaser.Easing.Linear.None, true);
+      this.game.add.tween(this.intro).to({alpha: 0}, 1500, Phaser.Easing.Linear.None, true);
+    }, this);
 
     // Call the 'jump' function when the spacekey is hit
     let spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
